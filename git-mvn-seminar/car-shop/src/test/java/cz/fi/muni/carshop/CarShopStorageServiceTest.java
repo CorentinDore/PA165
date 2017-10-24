@@ -2,6 +2,7 @@ package cz.fi.muni.carshop;
 
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -31,9 +32,20 @@ public class CarShopStorageServiceTest {
 		// JUnit 4.11
 		//thrown.expect(IllegalArgumentException.class);
 		// JUnit 4.12
-		 thrown.reportMissingExceptionWithMessage("We expect exception on negative price").expect(IllegalArgumentException.class);
+		//thrown.reportMissingExceptionWithMessage("We expect exception on negative price").expect(IllegalArgumentException.class);
 
-		service.addCarToStorage(new Car(Color.BLACK, CarTypes.AUDI, 2016, -1));
+		service.addCarToStorage(new Car(Color.BLACK, CarTypes.AUDI, 2016, 0));
+		Map<CarTypes, List<Car>> cars = CarShopStorage.getInstancce().getCars();
+		
+		for(Map.Entry<CarTypes, List<Car>> entry : cars.entrySet()) {
+			System.out.println("VALUE : "+entry.getKey());
+			for(Car car : entry.getValue()) {
+				System.out.println("Price :"+car.getPrice());
+				assertThat(car.getPrice(), greaterThanOrEqualTo(0));
+				//assertTrue(Math.signum(car.getPrice())>0);
+				
+			}
+		}
 	}
 
 	@Test
